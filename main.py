@@ -14,12 +14,12 @@ template = env.get_template('template.html')
 
 
 with open('roza.txt', 'r', encoding='utf-8') as f:
-    wine = f.read()
-    wine_page = wine.split('#')
+    wines_page = f.read()
+    wines_page = wines_page.split('#')
     all_wines = []
-    for grup in wine_page[1:]:
-        name = grup.strip().split('\n\n')[0]
-        wines = grup.strip().split('\n\n')[1:]
+    for group in wines_page[1:]:
+        name = group.strip().split('\n\n')[0]
+        wines = group.strip().split('\n\n')[1:]
         wine_groups = []
         wine_groups.append(name)
         for wine in wines:
