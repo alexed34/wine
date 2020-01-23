@@ -4,6 +4,14 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 import datetime
+import os
+from dotenv import load_dotenv
+import sys
+import argparse
+
+
+
+load_dotenv()
 
 env = Environment(
     loader=FileSystemLoader('.'),
@@ -12,8 +20,20 @@ env = Environment(
 
 template = env.get_template('template.html')
 
+file_wine = os.getenv('FILE_WINE')
 
-with open('roza.txt', 'r', encoding='utf-8') as f:
+
+def createParser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('name', nargs='?', default=file_wine)
+    return parser
+
+
+parser = createParser()
+namespace = parser.parse_args(sys.argv[1:])
+
+
+with open(namespace.name, 'r', encoding='utf-8') as f:
     wines_page = f.read()
     wines_page = wines_page.split('#')
     all_wines = []
@@ -26,17 +46,17 @@ with open('roza.txt', 'r', encoding='utf-8') as f:
             wine = wine.strip().split('\n')
             wines_description = {}
             for index in wine:
-                try:
+                index_key = lambda index: index[0].lower()
+                if ':' in index:
                     index = index.split(':')
-                    index_key = index[0].lower()
-                    wines_description[index_key] = index[1].strip()
-                except:
-                    index = index[0].split()
-                    wines_description[index_key] = 'yes'
+                    wines_description[index_key(index)] = index[1].strip()
+                else:
+                    index = index.split()
+                    wines_description[index_key(index)] = 'yes'
+
             wine_groups.append(wines_description)
         all_wines.append(wine_groups)
-
-
+print(all_wines)
 
 rendered_page = template.render(
     data_year=datetime.datetime.now().year - 1920,
