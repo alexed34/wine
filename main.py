@@ -28,11 +28,10 @@ with open('roza.txt', 'r', encoding='utf-8') as f:
             for index in wine:
                 try:
                     index = index.split(':')
-                    index_key = index[0].lower()
-                    wines_description[index_key] = index[1].strip()
+                    wines_description[index[0].lower()] = index[1].strip()
                 except:
                     index = index[0].split()
-                    wines_description[index_key] = 'yes'
+                    wines_description[index[0].lower()] = 'yes'
             wine_groups.append(wines_description)
         all_wines.append(wine_groups)
 
