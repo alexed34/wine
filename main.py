@@ -34,32 +34,31 @@ namespace = parser.parse_args(sys.argv[1:])
 
 
 with open(namespace.name, 'r', encoding='utf-8') as f:
-    wines_page = f.read()
-    wines_page = wines_page.split('#')
+    wines_data = f.read()
+    wines_data = wines_data.split('#')
     all_wines = []
-    for group in wines_page[1:]:
-        name = group.strip().split('\n\n')[0]
-        wines = group.strip().split('\n\n')[1:]
-        wine_groups = []
-        wine_groups.append(name)
-        for wine in wines:
+    for category in wines_data[1:]:
+        name_category = category.strip().split('\n\n')[0]
+        wines_category = category.strip().split('\n\n')[1:]
+        wine_category = []
+        wine_category.append(name_category)
+        for wine in wines_category:
             wine = wine.strip().split('\n')
-            wines_description = {}
-            for index in wine:
+            wine_description = {}
+            for description in wine:
                 # для проверяющего:
                 # здесь я справил ваше замечание с шага 21, но мне кажется код от этого стал хуже
                 # вынос в отдельную переменную лямбды  только ухудшает чтение кода, мне так кажется,
                 # а более красивое решение мне не приходит в голову.
-                index_key = lambda index: index[0].lower()
-                if ':' in index:
-                    index = index.split(':')
-                    wines_description[index_key(index)] = index[1].strip()
+                dict_key = lambda key_value: key_value[0].lower()
+                if ':' in description:
+                    key_value = description.split(':')
+                    wine_description[dict_key(key_value)] = key_value[1].strip()
                 else:
-                    index = index.split()
-                    wines_description[index_key(index)] = 'yes'
-
-            wine_groups.append(wines_description)
-        all_wines.append(wine_groups)
+                    key_value = description.split()
+                    wine_description[dict_key(key_value)] = 'yes'
+            wine_category.append(wine_description)
+        all_wines.append(wine_category)
 print(all_wines)
 
 rendered_page = template.render(
