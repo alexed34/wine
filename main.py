@@ -73,20 +73,14 @@ def convert_text(text):
 #     return all_wines
 
 
-
-
-
 def render_page(env, all_wines):
     template = env.get_template('template.html')
     rendered_page = template.render(
         data_year=datetime.datetime.now().year - 1920,
         wines=all_wines,
     )
-
     with open('index.html', 'w', encoding="utf8") as file:
         file.write(rendered_page)
-
-
 
 
 def main():
