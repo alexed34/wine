@@ -38,31 +38,21 @@ with open(namespace.name, 'r', encoding='utf-8') as f:
     text_fragments = text.split('#')
     all_wines = []
     for fragment in text_fragments[1:]:
-        wine_section = {}
-        wine_section['name'] = fragment.strip().split('\n\n')[0]
-        wines_in_section = fragment.strip().split('\n\n')[1:]
+        wine_category = {}
+        wine_category['name'] = fragment.strip().split('\n\n')[0]
+        wines_in_fragment = fragment.strip().split('\n\n')[1:]
         wines = []
-        for wine in wines_in_section:
-            wine = wine.strip().split('\n')
-            wine_list = []
-            for description in wine:
-                description = description.split()
-                wine_list.append(' '.join(description[1:]))
-            wines.append(wine_list)
-            wine_section['wine'] = wines
-        all_wines.append(wine_section)
+        for wine in wines_in_fragment:
+            wine_description = wine.strip().split('\n')
+            list_wine_characteristics = []
+            for characteristics in wine_description:
+                characteristics = characteristics.split()
+                list_wine_characteristics.append(' '.join(characteristics[1:]))
+            wines.append(list_wine_characteristics)
+            wine_category['wine'] = wines
+        all_wines.append(wine_category)
     print(all_wines)
 
-#                 dict_key = lambda key_value: key_value[0].lower()
-#                 if ':' in description:
-#                     key_value = description.split(':')
-#                     wine_description[key_value[0].lower()] = key_value[1].strip()
-#                 else:
-#                     key_value = description.split()
-#                     wine_description[key_value[0].lower()] = 'yes'
-#             wine_section.append(wine_description)
-#         all_wines.append(wine_section)
-# print(all_wines)
 
 rendered_page = template.render(
     data_year=datetime.datetime.now().year - 1920,
