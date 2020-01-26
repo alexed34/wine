@@ -8,10 +8,11 @@ import sys
 import argparse
 
 
-def createParser(path_file_wine):
+def get_file_terminal(path_file_wine):
     parser = argparse.ArgumentParser()
     parser.add_argument('name', nargs='?', default=path_file_wine)
-    return parser
+    namespace = parser.parse_args(sys.argv[1:])
+    return namespace
 
 
 def read_file(filname):
@@ -37,31 +38,11 @@ def convert_text(text):
             wines.append(list_wine_characteristics)
             wine_category['wine'] = wines
         all_wines.append(wine_category)
-    print(all_wines)
     return all_wines
 
 
-
-
-
-def main():
-    load_dotenv()
-
-    env = Environment(
-        loader=FileSystemLoader('.'),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-
+def render_page(env, all_wines):
     template = env.get_template('template.html')
-
-    path_file_wine = os.getenv('FILE_WINE')
-    parser = createParser(path_file_wine)
-    namespace = parser.parse_args(sys.argv[1:])
-
-    text = read_file(namespace)
-    all_wines = convert_text(text)
-
-
     rendered_page = template.render(
         data_year=datetime.datetime.now().year - 1920,
         wines=all_wines,
@@ -69,6 +50,22 @@ def main():
 
     with open('index.html', 'w', encoding="utf8") as file:
         file.write(rendered_page)
+
+
+
+
+def main():
+    load_dotenv()
+    env = Environment(
+        loader=FileSystemLoader('.'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+
+    path_file_wine = os.getenv('FILE_WINE')
+    namespace = get_file_terminal(path_file_wine)
+    text = read_file(namespace)
+    all_wines = convert_text(text)
+    render_page(env, all_wines)
 
     server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
     server.serve_forever()
