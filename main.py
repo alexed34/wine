@@ -38,7 +38,42 @@ def convert_text(text):
             wines.append(list_wine_characteristics)
             wine_category['wine'] = wines
         all_wines.append(wine_category)
+    print(all_wines)
     return all_wines
+
+# Альтернативная версия конвертации текста
+# def convert_text(text):
+#     text = text.split('\n')
+#     all_wines = []
+#     for i in text:
+#         if '#' in i:
+#             wine_category = {}
+#             wine_category['name'] = i.strip('#, , \n')
+#             all_wines.append(wine_category)
+#             wines = []
+#             wine_category['wine'] = wines
+#         elif 'Название' in i:
+#             list_wine_characteristics = []
+#             wines.append(list_wine_characteristics)
+#             name = i.split(':')
+#             list_wine_characteristics.append(name[1].strip())
+#         elif 'Сорт' in i:
+#             name = i.split(':')
+#             list_wine_characteristics.append(name[1].strip())
+#         elif 'Цена' in i:
+#             name = i.split(':')
+#             list_wine_characteristics.append(name[1].strip())
+#         elif 'Картинка' in i:
+#             name = i.split(':')
+#             list_wine_characteristics.append(name[1].strip())
+#         elif 'Выгодное' in i:
+#             name = i.split(' ')
+#             list_wine_characteristics.append(name[1].strip())
+#     print(all_wines)
+#     return all_wines
+
+
+
 
 
 def render_page(env, all_wines):
