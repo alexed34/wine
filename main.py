@@ -34,32 +34,35 @@ namespace = parser.parse_args(sys.argv[1:])
 
 
 with open(namespace.name, 'r', encoding='utf-8') as f:
-    wines_data = f.read()
-    wines_data = wines_data.split('#')
+    text = f.read()
+    text_fragments = text.split('#')
     all_wines = []
-    for category in wines_data[1:]:
-        name_category = category.strip().split('\n\n')[0]
-        wines_category = category.strip().split('\n\n')[1:]
-        wine_category = []
-        wine_category.append(name_category)
-        for wine in wines_category:
+    for fragment in text_fragments[1:]:
+        wine_section = {}
+        wine_section['name'] = fragment.strip().split('\n\n')[0]
+        wines_in_section = fragment.strip().split('\n\n')[1:]
+        wines = []
+        for wine in wines_in_section:
             wine = wine.strip().split('\n')
-            wine_description = {}
+            wine_list = []
             for description in wine:
-                # для проверяющего:
-                # здесь я справил ваше замечание с шага 21, но мне кажется код от этого стал хуже
-                # вынос в отдельную переменную лямбды  только ухудшает чтение кода, мне так кажется,
-                # а более красивое решение мне не приходит в голову.
-                dict_key = lambda key_value: key_value[0].lower()
-                if ':' in description:
-                    key_value = description.split(':')
-                    wine_description[dict_key(key_value)] = key_value[1].strip()
-                else:
-                    key_value = description.split()
-                    wine_description[dict_key(key_value)] = 'yes'
-            wine_category.append(wine_description)
-        all_wines.append(wine_category)
-print(all_wines)
+                description = description.split()
+                wine_list.append(' '.join(description[1:]))
+            wines.append(wine_list)
+            wine_section['wine'] = wines
+        all_wines.append(wine_section)
+    print(all_wines)
+
+#                 dict_key = lambda key_value: key_value[0].lower()
+#                 if ':' in description:
+#                     key_value = description.split(':')
+#                     wine_description[key_value[0].lower()] = key_value[1].strip()
+#                 else:
+#                     key_value = description.split()
+#                     wine_description[key_value[0].lower()] = 'yes'
+#             wine_section.append(wine_description)
+#         all_wines.append(wine_section)
+# print(all_wines)
 
 rendered_page = template.render(
     data_year=datetime.datetime.now().year - 1920,
