@@ -21,14 +21,14 @@ def read_file(filname):
 
 
 def convert_text(text):
-    text_fragments = text.split('#')
+    fragments_text = text.split('#')
     all_wines = []
-    for fragment in text_fragments[1:]:
-        category_fragment = fragment.strip().split('\n\n')
+    for fragment in fragments_text[1:]:
+        wines_section = fragment.strip().split('\n\n')
         wine_category = {
-            'name': category_fragment[0]
+            'name': wines_section[0]
         }
-        wines_in_category = category_fragment[1:]
+        wines_in_category = wines_section[1:]
         wines = []
         for wine in wines_in_category:
             wine_description = wine.strip().split('\n')
