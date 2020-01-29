@@ -11,34 +11,35 @@ def get_command_line_argument(path_wine_file):
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', '--name', default=path_wine_file)
     namespace = parser.parse_args(sys.argv[1:])
-    return namespace
+    return namespace.name
 
 
-def read_file(filname):
-    with open(filname.name, 'r', encoding='utf-8') as f:
+def read_file(path):
+    with open(path, 'r', encoding='utf-8') as f:
         text = f.read()
         return text
 
 
 def convert_text(text):
-    fragments_text = text.split('#')
+    text_fragment = text.split('#')
     all_wines = []
-    for fragment in fragments_text[1:]:
-        wines_section = fragment.strip().split('\n\n')
+    for fragment in text_fragment[1:]:
+        text_blocks = fragment.strip().split('\n\n')
         wine_category = {
-            'name': wines_section[0]
+            'name': text_blocks[0]
         }
-        wines_in_category = wines_section[1:]
+        text_data = text_blocks[1:]
         wines = []
-        for wine in wines_in_category:
-            wine_description = wine.strip().split('\n')
-            list_wine_characteristics = []
-            for characteristics in wine_description:
-                characteristics = characteristics.split()
-                list_wine_characteristics.append(' '.join(characteristics[1:]))
-            wines.append(list_wine_characteristics)
+        for data in text_data:
+            text_lines = data.strip().split('\n')
+            characteristics_wine = []
+            for line in text_lines:
+                characteristic = line.split()
+                characteristics_wine.append(' '.join(characteristic[1:]))
+            wines.append(characteristics_wine)
             wine_category['wines'] = wines
         all_wines.append(wine_category)
+    print(all_wines)
     return all_wines
 
 
